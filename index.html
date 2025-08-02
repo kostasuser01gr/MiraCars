@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiraCars · Premium Car Rental</title>
+  <meta name="description" content="MiraCars – fast, simple, premium car rental. Book city cars, SUVs, vans and luxury rides in seconds." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Toast notifications -->
+  <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+  <!-- Global header -->
+  <header aria-label="Global">
+    <div class="container nav" role="navigation">
+      <div class="brand" aria-label="MiraCars home">
+        <div class="brand-badge" aria-hidden="true">M</div>
+        <span>MiraCars</span>
+      </div>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#fleet">Fleet</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="cta">
+        <button class="btn ghost" id="btnSignIn" type="button">Owner sign‑in</button>
+        <button class="btn brand" id="btnGetQuote" type="button" onclick="document.querySelector('#bookingForm').scrollIntoView({behavior:'smooth'})">Get quote</button>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <!-- HERO -->
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <div class="hero-text">
+        <p class="overline" style="color:var(--brand-secondary); font-weight:800; letter-spacing:.18em; text-transform:uppercase;">Premium car rental</p>
+        <h1 id="hero-title">Accompany your journey with comfort</h1>
+        <p>Fast pick‑up, spotless fleet and human support. Choose city, SUV, van or luxury and lock a great rate.</p>
+        <div class="hero-card" role="region" aria-label="Quick booking">
+          <form id="bookingForm" class="booking-bar" novalidate>
+            <div class="field">
+              <label for="location">Location</label>
+              <select id="location">
+                <option value="" disabled selected>Choose location</option>
+                <option>Heraklion Airport (HER)</option>
+                <option>Chania Airport (CHQ)</option>
+                <option>Rethymno City</option>
+                <option>Agios Nikolaos</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="carType">Car type</label>
+              <select id="carType">
+                <option value="" disabled selected>Select</option>
+                <option value="city">City</option>
+                <option value="suv">SUV</option>
+                <option value="van">Van</option>
+                <option value="luxury">Luxury</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="start">Pick‑up</label>
+              <input id="start" type="datetime-local" />
+            </div>
+            <div class="field">
+              <label for="end">Return</label>
+              <input id="end" type="datetime-local" />
+            </div>
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" type="text" placeholder="Full name" />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="your@email.com" />
+            </div>
+            <div class="field">
+              <label for="phone">Phone <span style="opacity:.6;">(optional)</span></label>
+              <input id="phone" type="tel" placeholder="e.g. +30 697 1234567" />
+            </div>
+            <div class="field">
+              <label for="vipInput">VIP code <span style="opacity:.6;">(optional)</span></label>
+              <input id="vipInput" type="text" placeholder="Enter VIP code" />
+            </div>
+            <button class="btn search" type="submit" aria-label="Search cars">Search</button>
+          </form>
+          <div id="extrasSection" style="margin-top:12px;">
+            <label style="font-size:13px;color:var(--muted);">Select extras:</label>
+            <div id="extrasContainer" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;"></div>
+          </div>
+          <!-- VIP extras will be shown here when code matches -->
+          <div id="vipExtrasSection" style="display:none;margin-top:12px;">
+            <label style="font-size:13px;color:var(--muted);">VIP extras:</label>
+            <div id="vipExtrasContainer" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;"></div>
+          </div>
+          <div id="formError" role="alert" aria-live="polite" style="color:var(--danger);padding-top:8px;min-height:1.4em;"></div>
+          <div class="badges" aria-label="Highlights">
+            <div class="badge">⏱️ 60‑sec booking</div>
+            <div class="badge">🧼 Clean & inspected</div>
+            <div class="badge">💳 Pay on pick‑up</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image" aria-hidden="true">
+        <img src="assets/hero1.png" alt="Hero car" />
+      </div>
+    </section>
+    <!-- FLEET -->
+    <section id="fleet" class="section" aria-labelledby="fleet-title">
+      <h2 id="fleet-title">Our Impressive Fleet</h2>
+      <div class="filter" role="tablist" aria-label="Filter cars by type">
+        <button class="chip active" role="tab" aria-selected="true" data-filter="all">All</button>
+        <button class="chip" role="tab" data-filter="city">City</button>
+        <button class="chip" role="tab" data-filter="suv">SUV</button>
+        <button class="chip" role="tab" data-filter="van">Van</button>
+        <button class="chip" role="tab" data-filter="luxury">Luxury</button>
+      </div>
+      <div class="grid" id="carsGrid" aria-live="polite"></div>
+    </section>
+    <!-- HOW IT WORKS -->
+    <section id="how" class="section" aria-labelledby="how-title">
+      <h2 id="how-title">How it works</h2>
+      <div class="how-grid">
+        <div class="how-card"><h3>1. Search</h3><p>Set location & dates. We show what’s truly available at those times.</p></div>
+        <div class="how-card"><h3>2. Select</h3><p>Compare daily rates, mileage and extras and pick your ride.</p></div>
+        <div class="how-card"><h3>3. Drive</h3><p>Bring your license & payment card. We’ll hand you clean keys in ~5 minutes.</p></div>
+      </div>
+    </section>
+    <!-- CTA BANNER -->
+    <section class="section" aria-label="Special offer">
+      <div class="cta-banner">
+        <div>
+          <h3 style="margin:0 0 8px;">Early‑bird summer rates</h3>
+          <p style="margin:0;color:var(--muted);">Book 7+ days and save up to 15%. Applies to city & SUV categories.</p>
+        </div>
+        <div class="cta-actions">
+          <button class="btn brand" onclick="window.scrollTo({top:0,behavior:'smooth'})">Book now</button>
+        </div>
+      </div>
+    </section>
+    <!-- CONTACT -->
+    <section id="contact" class="section" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact</h2>
+      <div class="grid">
+        <div class="card"><div class="content">
+          <h3>Heraklion Airport (HER)</h3>
+          <p>☎︎ +30 694 572 7760<br/>✉︎ support@miracars.example</p>
+          <p class="row"><span>Hours</span><span>Mon–Sun 07:00–23:00</span></p>
+        </div></div>
+        <div class="card"><div class="content">
+          <h3>Chania Airport (CHQ)</h3>
+          <p>☎︎ +30 693 675 2098<br/>✉︎ chq@miracars.example</p>
+          <p class="row"><span>Hours</span><span>Mon–Sun 07:00–22:00</span></p>
+        </div></div>
+        <div class="card"><div class="content">
+          <h3>Support</h3>
+          <p>For changes or corporate accounts, reply to your confirmation email—goes straight to our desk.</p>
+          <button class="btn ghost" type="button" id="btnOpenChat" onclick="window.open('https://wa.me/306945727760','_blank')">Open WhatsApp</button>
+        </div></div>
+      </div>
+    </section>
+  </main>
+  <footer role="contentinfo">
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;padding:20px 0;gap:12px;flex-wrap:wrap;">
+      <div>© <span id="year"></span> MiraCars. All rights reserved.</div>
+      <div style="display:flex;gap:14px;align-items:center;">
+        <a href="#" aria-label="Terms">Terms</a>
+        <a href="#" aria-label="Privacy">Privacy</a>
+        <a href="#" aria-label="Cookies">Cookies</a>
+      </div>
+    </div>
+  </footer>
+  <!-- Booking Preview Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal" role="document">
+      <header>
+        <h3 id="modalTitle" style="margin:0;">Your booking summary</h3>
+        <button class="btn ghost" type="button" id="btnCloseModal" aria-label="Close">Close</button>
+      </header>
+      <div class="body" id="modalBody"></div>
+      <div class="actions">
+        <button class="btn ghost" id="btnEdit">Edit</button>
+        <button class="btn brand" id="btnConfirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+  <!-- Owner sign‑in modal -->
+  <div class="modal-backdrop" id="signInModal" aria-hidden="true" style="display:none;">
+    <div class="modal" role="document">
+      <header>
+        <h3 style="margin:0;">Owner sign‑in</h3>
+        <button class="btn ghost" type="button" id="btnCloseSignIn" aria-label="Close">Close</button>
+      </header>
+      <form class="body" id="signInForm">
+        <div class="field">
+          <label for="adminEmail">Email</label>
+          <input id="adminEmail" type="email" required placeholder="admin@example.com" />
+        </div>
+        <div class="field">
+          <label for="adminPassword">Password</label>
+          <input id="adminPassword" type="password" required />
+        </div>
+        <div class="actions" style="justify-content:flex-end;">
+          <button class="btn brand" type="submit">Sign in</button>
+          <button class="btn secondary" type="button" id="btnBiometric">Biometric</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Admin panel (hidden until authenticated) -->
+  <section id="adminContainer" style="display:none;" class="container section">
+    <h2>Owner dashboard</h2>
+    <div class="admin-panel">
+      <h3>Theme settings</h3>
+      <div class="control-group">
+        <label>Background color</label>
+        <input type="color" id="themeBg" class="theme-input" data-key="bg" />
+      </div>
+      <div class="control-group">
+        <label>Card color</label>
+        <input type="color" id="themeCard" class="theme-input" data-key="card" />
+      </div>
+      <div class="control-group">
+        <label>Muted text color</label>
+        <input type="color" id="themeMuted" class="theme-input" data-key="muted" />
+      </div>
+      <div class="control-group">
+        <label>Main text color</label>
+        <input type="color" id="themeText" class="theme-input" data-key="text" />
+      </div>
+      <div class="control-group">
+        <label>Primary accent</label>
+        <input type="color" id="themePrimary" class="theme-input" data-key="brandPrimary" />
+      </div>
+      <div class="control-group">
+        <label>Secondary accent</label>
+        <input type="color" id="themeSecondary" class="theme-input" data-key="brandSecondary" />
+      </div>
+    </div>
+    <div class="admin-panel">
+      <h3>Booking requirements</h3>
+      <p style="color:var(--muted);margin-bottom:12px;">Toggle whether each field is required on the booking form.</p>
+      <div class="control-group">
+        <label><input type="checkbox" class="req-input" id="req-location" data-field="location"> Location</label>
+        <label><input type="checkbox" class="req-input" id="req-carType" data-field="type"> Car type</label>
+        <label><input type="checkbox" class="req-input" id="req-start" data-field="start"> Pick‑up</label>
+        <label><input type="checkbox" class="req-input" id="req-end" data-field="end"> Return</label>
+        <label><input type="checkbox" class="req-input" id="req-name" data-field="name"> Name</label>
+        <label><input type="checkbox" class="req-input" id="req-email" data-field="email"> Email</label>
+        <label><input type="checkbox" class="req-input" id="req-phone" data-field="phone"> Phone</label>
+      </div>
+    </div>
+    <div class="admin-panel">
+      <h3>VIP settings</h3>
+      <div class="control-group">
+        <label for="vipCode">VIP code</label>
+        <input type="text" id="vipCode" placeholder="Set VIP code" />
+      </div>
+    </div>
+    <div class="admin-panel">
+      <h3>Manage cars</h3>
+      <div id="adminCarsList" style="margin-bottom:10px;"></div>
+      <form id="addCarForm">
+        <div class="control-group"><label for="newCarName">Name</label><input type="text" id="newCarName" required /></div>
+        <div class="control-group"><label for="newCarType">Type</label>
+          <select id="newCarType" required>
+            <option value="city">City</option>
+            <option value="suv">SUV</option>
+            <option value="van">Van</option>
+            <option value="luxury">Luxury</option>
+          </select>
+        </div>
+        <div class="control-group"><label for="newCarSeats">Seats</label><input type="number" id="newCarSeats" value="4" min="1" /></div>
+        <div class="control-group"><label for="newCarLuggage">Bags</label><input type="number" id="newCarLuggage" value="2" min="0" /></div>
+        <div class="control-group"><label for="newCarPrice">Price per day (€)</label><input type="number" id="newCarPrice" step="0.01" value="50" min="1" /></div>
+        <div class="control-group"><label for="newCarImage">Image filename (optional)</label><input type="text" id="newCarImage" placeholder="e.g. mycar.jpg" /></div>
+        <button class="btn brand" type="submit">Add car</button>
+      </form>
+    </div>
+    <div class="admin-panel">
+      <h3>Manage extras</h3>
+      <div id="adminExtrasList" style="margin-bottom:10px;"></div>
+      <form id="addExtraForm">
+        <div class="control-group"><label for="newExtraName">Name</label><input type="text" id="newExtraName" required /></div>
+        <div class="control-group"><label for="newExtraPrice">Price per day (€)</label><input type="number" id="newExtraPrice" step="0.01" required min="1" /></div>
+        <div class="control-group"><label><input type="checkbox" id="newExtraVip"> VIP only</label></div>
+        <button class="btn brand" type="submit">Add extra</button>
+      </form>
+    </div>
+  </section>
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+</body>
+</html>
