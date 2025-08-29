@@ -1,0 +1,17 @@
+/* src/styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Luxury fonts & base styling */
+body {
+  font-family: 'Inter', 'Geist', sans-serif;
+}
+
+/* Example button styles if δεν χρησιμοποιείς shadcn/ui */
+.btn-primary {
+  @apply bg-teal-500 text-white px-6 py-2 rounded-lg shadow hover:bg-teal-700 transition;
+}
+.btn-secondary {
+  @apply bg-gray-200 text-gray-800 px-6 py-2 rounded-lg shadow hover:bg-gray-400 transition;
+}
